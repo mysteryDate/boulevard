@@ -2,5 +2,21 @@ body {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-color: #BEB6E0;
-	background-position: center;
+	background-position: center top;
+	margin: 0;
+}
+
+* {
+	font-family: helvetica-light, helvetica, sans;
+}
+
+div.sections {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	border: 1px solid black;
+}
+
+.sections h1 {
+	text-align: center;
 }
