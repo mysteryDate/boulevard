@@ -80,7 +80,7 @@ window.onscroll = function(e) {
 
 function position_panels() {
 
-	var totalHeight = 1.5 * $(window).width(); 	// 1.5 should be the asect ratio of the background
+	var totalHeight = 1.2 * $(window).width(); 	// 1.5 should be the apsect ratio of the background
 	var divisionDistance = totalHeight / numSections;		// Should be total height over number of sections, I need to fiture out what total height is
 	var windowHeight = $(window).height();		// Just so it only runs once
 	var scrollY = window.scrollY;
