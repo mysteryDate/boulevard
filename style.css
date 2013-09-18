@@ -1,8 +1,7 @@
 body {
-	background-size: cover;
+	background-size: 100%;
 	background-repeat: no-repeat;
 	background-color: #BEB6E0;
-	background-position: center top;
 	margin: 0;
 }
 
@@ -12,7 +11,6 @@ body {
 }
 
 div.sections {
-	position: absolute;
 	height: 100%;
 	width: 100%;
 	border: 1px solid black;
