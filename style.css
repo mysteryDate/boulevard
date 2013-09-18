@@ -8,6 +8,7 @@ body {
 
 * {
 	font-family: helvetica-light, helvetica, sans;
+	box-sizing: border-box;
 }
 
 div.sections {

@@ -9,9 +9,10 @@ var viewState = sectionTitles[0];
 var backgroundImage = new Image();
 backgroundImage.src = "background.jpg"; 
 
-var totalHeight = 1.2 * $(window).width(); 	// Const should be the apsect ratio of the background
-var divisionDistance = totalHeight / numSections;		// Should be total height over number of sections, I need to fiture out what total height is
+var aspectRatio = 1.5;	// Made this up
+var totalHeight = aspectRatio * $(window).width(); 
 var windowHeight = $(window).height();		// Just so it only runs once
+var divisionDistance = (totalHeight - windowHeight) / (numSections - 1);		// Should be total height over number of sections, I need to fiture out what total height is
 
 var sectionHeight;
 var sections = [];
@@ -66,9 +67,11 @@ $(document).ready(function() {
 
 window.onresize = function (e) {
 
-	var totalHeight = 1.2 * $(window).width(); 	// Const should be the apsect ratio of the background
-	var divisionDistance = totalHeight / numSections;		// Should be total height over number of sections, I need to fiture out what total height is
-	var windowHeight = $(window).height();		// Just so it only runs once
+	totalHeight = aspectRatio * $(window).width(); 	// Const should be the apsect ratio of the background
+	windowHeight = $(window).height();		// Just so it only runs once
+	divisionDistance = (totalHeight - windowHeight) / (numSections - 1);	// Should be total height over number of sections, I need to fiture out what total height is
+
+	//$('body').css('height', totalHeight+'px');
 
 	for (var i = 0; i < sections.length; i++) {
 		sections[i].mark = divisionDistance*i;
@@ -79,6 +82,7 @@ window.onresize = function (e) {
 
 window.onscroll = function(e) {
 	position_panels();
+	console.log("scroll");
 }
 
 function position_panels() {
@@ -93,19 +97,29 @@ function position_panels() {
 
 		var $frame = sections[i].$self;
 		var mark = sections[i].mark;
-		var disp = mark - scrollY;		// Displacement of the current frame from view
+		var disp = mark - scrollY;		// Displacement of the centering frame from view
 
 		// To avoid a quintic calulation for sections out of the frame
-		if ( disp > windowHeight || disp < -windowHeight ) $frame.css('display', 'none');		
-		
-		else {
-			$frame.css('display', 'block');
-			var b = i * windowHeight;
-			var m = windowHeight / divisionDistance;
-			var y = m * scrollY - b;
-			sections[i].$self.css('top', (scrollY - y)+'px');
-		}
+		//if ( disp > divisionDistance || disp < -divisionDistance ) {
+		//	$frame.css('display', 'none');	
+		//}
+		//else {
+		//	$frame.css('display', 'block');
+			var m = (divisionDistance - windowHeight) / divisionDistance;
+			var b = windowHeight * i;
+			var t = m * scrollY + b;
+			sections[i].$self.css('top', t+'px');
+		//}
 	};
 
 	
+}
+
+function find_height(scrollY, mark, divisionDistance) {
+
+	var m = -(scrollY + windowHeight)/(divisionDistance + mark);
+	var y = m * (scrollY - mark);
+	var top = y + scrollY;
+
+	return top;
 }
