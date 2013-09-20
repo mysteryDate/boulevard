@@ -1,7 +1,6 @@
 body {
 	background-size: 100%;
 	background-repeat: no-repeat;
-	background-color: #BEB6E0;
 	margin: 0;
 }
 
@@ -13,7 +12,8 @@ body {
 div.sections {
 	height: 100%;
 	width: 100%;
-	border: 1px solid black;
+	opacity: 0;
+	position: relative;
 }
 
 .sections h1 {
