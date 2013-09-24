@@ -1,6 +1,11 @@
+html {
+	height: 100%;
+} 
+
 body {
-	/*background-size: 100%;
-	background-repeat: no-repeat;*/
+	background-size: 100%;
+	height: 400%;
+	background-repeat: no-repeat;
 	margin: 0;
 }
 
@@ -10,7 +15,7 @@ body {
 }
 
 div.sections {
-	height: 100%;
+	height: 25%;
 	width: 100%;
 	opacity: 0;
 	position: relative;

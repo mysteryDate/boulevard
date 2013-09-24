@@ -22,18 +22,14 @@ var $body;
 
 $(document).ready(function() {
 
-	// Size variables
-	//windowHeight = $('#'+sectionHeaders[0]).height();
-	//windowWidth = $('#'+sectionHeaders[0]).width();
-	//fullHeight = $(window).height();
-	//backgroundHeight = windowWidth * aspectRatio;
-	//parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
-
 	backgroundImage.onload = function () {
+		initialize();
 		$body = $('body');
-		$body.css('background-image', 'url("background2.jpg")');
+		$body.css({
+			'background-image': 'url("background2.jpg")',
+			//'height': fullHeight
+		});
 
-		window.onresize();
 
 		$('.sections').each(function(i, e){
 			/*
@@ -52,29 +48,27 @@ $(document).ready(function() {
 	}
 });
 
+function initialize() {
+	windowHeight = $(window).height();
+	windowWidth = $(window).width();
+	fullHeight = $(document).height();
+	backgroundHeight = windowWidth * aspectRatio;
+	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
+	//parallaxConstant = (fullHeight - backgroundHeight)/(backgroundHeight - windowHeight);
+}
 
 window.onscroll = function(e) {
 
 	latestKnownScrollY = window.scrollY;
 	requestTick();
-	//update();
-
-	//var currentScrollY = latestKnownScrollY;
-	//var newPosition = parallaxConstant*scrollY;
-	//$("body").css('background-position', 'center '+newPosition+'px');
-
-
-	//$('.sections').each(function(i, e){
-	//	$(this).css('top', newPosition);
-	//});
 
 }
 
 window.onresize = function(e) {
 
-	windowHeight = $('#'+sectionHeaders[0]).height();
-	windowWidth = $('#'+sectionHeaders[0]).width();
-	fullHeight = $(window).height();
+	windowHeight = $(window).height();
+	windowWidth = $(window).width();
+	fullHeight = $(document).height();
 	backgroundHeight = windowWidth * aspectRatio;
 	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
 	//parallaxConstant = (fullHeight - backgroundHeight)/(backgroundHeight - windowHeight);
