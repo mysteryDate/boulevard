@@ -5,7 +5,7 @@ var numSections = 5;
 var sectionHeaders = ['title', 'about', 'services', 'rates'];
 var aspectRatio = 1.4;				// The apect ratio of our background image
 var backgroundImage = new Image();
-backgroundImage.src = "background_mono.jpg"; 
+backgroundImage.src = "background2.jpg"; 
 
 // Size variables
 var windowHeight;		
@@ -31,7 +31,7 @@ $(document).ready(function() {
 
 	backgroundImage.onload = function () {
 		$body = $('body');
-		$body.css('background-image', 'url("background_mono.jpg")');
+		$body.css('background-image', 'url("background2.jpg")');
 
 		window.onresize();
 
@@ -82,9 +82,6 @@ window.onresize = function(e) {
 }
 
 function requestTick() {
-	if(ticking) {
-		console.log('ticking!');
-	}
 	if(!ticking) {
 		requestAnimationFrame(update);
 	}
@@ -96,6 +93,6 @@ function update() {
 
 	var currentScrollY = latestKnownScrollY;
 	var newPosition = parallaxConstant*scrollY;
-	$("body").css('background-position', 'center '+newPosition+'px');
+	$body.css('background-position', 'center '+newPosition+'px');
 
 }
