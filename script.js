@@ -20,8 +20,8 @@ var parallaxConstant;
 var latestKnownScrollY = 0;
 var ticking = false;
 
-var $body;
 var $canvas;
+var timerRunning = false;
 
 $(document).ready(function() {
 
@@ -31,32 +31,32 @@ $(document).ready(function() {
 		imageWidth = this.width;
 		imageHeight = this.height;
 		aspectRatio = imageHeight/imageWidth;
-		initialize();
-		$body = $('body');
-		$body.css({
-			//'background-image': 'url('+backgroundImage.src+')',
-			//'height': fullHeight
-		});
-
 
 		$('.sections').each(function(i, e){
-			/*
 			var hue = Math.round(Math.random()*360);
-			var saturation = Math.round(Math.random()*100);
-			var lightness = Math.round(Math.random()*100);
-			var color = 'hsl('+hue+','+saturation+'%,'+lightness+'%)'; */
-			var r = Math.round(Math.random()*255);
+			var saturation = Math.round(Math.random()*20) + 80;
+			var lightness = Math.round(Math.random()*10) + 50;
+			var color = 'hsl('+hue+','+saturation+'%,'+lightness+'%)'; 
+			/*var r = Math.round(Math.random()*255);
 			var g = Math.round(Math.random()*255);
 			var b = Math.round(Math.random()*255);
-			var color = 'rgb('+r+','+g+','+b+')';
+			var color = 'rgb('+r+','+g+','+b+')';*/
 			$(this).css('background-color', color);
-			$(this).fadeTo(500, 0.25);
 		});
 
-		window.onresize();
+		initialize();
+
+		window.setTimeout(function(){ 
+			$('.sections').each(function(i,e){
+				$(this).fadeTo(500, 0.45, 'easeInQuart', function() {
+					$(this).fadeTo(500, 0.25, 'easeOutQuart');
+				});
+			});
+		}, 500);
 
 	}
 });
+
 
 function update_canvas(imageObject, height, width) {
     // New canvas
@@ -76,6 +76,7 @@ function initialize() {
 	fullHeight = $(document).height();
 	backgroundHeight = windowWidth * aspectRatio;
 	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
+	update_canvas(backgroundImage);
 	//parallaxConstant = (fullHeight - backgroundHeight)/(backgroundHeight - windowHeight);
 }
 
@@ -95,12 +96,15 @@ window.onresize = function(e) {
 	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
 	update_canvas(backgroundImage);
 	//parallaxConstant = (fullHeight - backgroundHeight)/(backgroundHeight - windowHeight);
-	window.onscroll();
+	onscroll();
 }
 
 function requestTick() {
 	if(!ticking) {
 		requestAnimationFrame(update);
+	}
+	else {
+		console.log('tick');
 	}
 	ticking = true;
 }
@@ -109,29 +113,22 @@ function update() {
 	ticking = false;
 
 	var currentScrollY = latestKnownScrollY;
-	var newPosition = parallaxConstant*scrollY;
+	var newPosition = Math.round(parallaxConstant*scrollY);
+
+	var oldPosition = parseInt($canvas.css('top'));
 
 	$canvas.css('top', newPosition);
-
+	//moveCanvas(newPosition, oldPosition);
 }
 
-function resizeImage(imageObject, width, height) {
-    var newWidth = width;
-    var newHeight = height;
-
-    // Calculate a new scale
-    // The new scale will be the minimum of the two possible scales
-    var scale = Math.min((newWidth / imageObject.width), (newHeight / imageObject.height));
-
-    // New canvas
-    var dst_canvas = document.createElement('canvas');
-    dst_canvas.width = imageObject.width * scale;
-    dst_canvas.height = imageObject.height * scale;
-
-    // Draw Image content in canvas
-    var dst_ctx = dst_canvas.getContext('2d');
-    dst_ctx.drawImage(imageObject, 0, 0, parseInt(imageObject.width * scale), parseInt(imageObject.height * scale));
-
-    // Replace source of Image
-    imageObject.src = dst_canvas.toDataURL();
+function moveCanvas(newPosition, oldPosition) {
+	if (!timerRunning) {
+		timerRunning = true;
+		var time = Math.abs(newPosition - oldPosition);
+		$canvas.animate({'top': newPosition}, 50, 'linear', function() {
+			timerRunning = false;
+		});
+	}
+	else console.log('a');
 }
+
