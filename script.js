@@ -1,13 +1,14 @@
 "use strict";
 
 // Constants
-var numSections = 5;
 var sectionHeaders = ['title', 'about', 'services', 'rates'];
-var aspectRatio;				// The apect ratio of our background image
+
+// Image variables
 var backgroundImage = new Image();
 backgroundImage.src = "backgrounds/2.jpg"; 
 var imageWidth;
 var imageHeight;
+var aspectRatio;				// The apect ratio of our background image
 
 // Size variables
 var windowHeight;		
@@ -20,8 +21,8 @@ var parallaxConstant;
 var latestKnownScrollY = 0;
 var ticking = false;
 
+// Cached for speed
 var $canvas;
-var timerRunning = false;
 
 $(document).ready(function() {
 
@@ -32,31 +33,45 @@ $(document).ready(function() {
 		imageHeight = this.height;
 		aspectRatio = imageHeight/imageWidth;
 
-		$('.sections').each(function(i, e){
-			var hue = Math.round(Math.random()*360);
-			var saturation = Math.round(Math.random()*20) + 80;
-			var lightness = Math.round(Math.random()*10) + 50;
-			var color = 'hsl('+hue+','+saturation+'%,'+lightness+'%)'; 
-			/*var r = Math.round(Math.random()*255);
-			var g = Math.round(Math.random()*255);
-			var b = Math.round(Math.random()*255);
-			var color = 'rgb('+r+','+g+','+b+')';*/
-			$(this).css('background-color', color);
-		});
-
 		initialize();
-
-		window.setTimeout(function(){ 
-			$('.sections').each(function(i,e){
-				$(this).fadeTo(500, 0.45, 'easeInQuart', function() {
-					$(this).fadeTo(500, 0.25, 'easeOutQuart');
-				});
-			});
-		}, 500);
-
 	}
 });
 
+function initialize() {
+	windowHeight = $(window).height();
+	windowWidth = $(window).width();
+	fullHeight = $(document).height();
+	backgroundHeight = windowWidth * aspectRatio;
+	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
+	update_canvas(backgroundImage);
+	color_panels();
+	window.onresize();
+
+	window.setTimeout(function(){ 
+		$('.sections .panel').fadeTo(500, 0.45, 'easeInQuart', function() {
+			$(this).fadeTo(500, 0.25, 'easeOutQuart');
+			$('.content').fadeTo(500, 1);
+		});
+	}, 1500);
+
+	window.setTimeout(function(){
+		console.log(scrollY);
+		var panelPosition = -1*Math.round(fullHeight/(scrollY+windowHeight/2))+5;
+		if (panelPosition < 1) panelPosition = 1;
+		console.log(panelPosition);
+		go_section(panelPosition);
+	}, 500);
+}
+
+function color_panels() {
+	$('.sections .panel').each(function(i, e){
+		var hue = Math.round(Math.random()*360);
+		var saturation = Math.round(Math.random()*20) + 80;
+		var lightness = Math.round(Math.random()*10) + 50;
+		var color = 'hsl('+hue+','+saturation+'%,'+lightness+'%)'; 
+		$(this).css('background-color', color);
+	});
+}
 
 function update_canvas(imageObject, height, width) {
     // New canvas
@@ -67,17 +82,29 @@ function update_canvas(imageObject, height, width) {
     // Draw Image content in canvas
     var dst_ctx = canvas.getContext('2d');
     dst_ctx.drawImage(imageObject, 0, 0, canvas.width, canvas.height);
-
 }
 
-function initialize() {
-	windowHeight = $(window).height();
-	windowWidth = $(window).width();
-	fullHeight = $(document).height();
-	backgroundHeight = windowWidth * aspectRatio;
-	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
-	update_canvas(backgroundImage);
-	//parallaxConstant = (fullHeight - backgroundHeight)/(backgroundHeight - windowHeight);
+function go_section(sectionNumber) {
+	var top = 2*(sectionNumber-1)*windowHeight + windowHeight/2;
+	$.scrollTo(top, 1000, {'easing': 'easeInOutCubic'});
+}
+
+
+function requestTick() {
+	if(!ticking) {
+		requestAnimationFrame(update);
+	}
+	ticking = true;
+}
+
+function update() {
+
+	ticking = false;
+
+	var currentScrollY = window.scrollY;
+	var newPosition = Math.round(parallaxConstant*currentScrollY);
+
+	$canvas.css('top', newPosition);
 }
 
 window.onscroll = function(e) {
@@ -95,40 +122,6 @@ window.onresize = function(e) {
 	backgroundHeight = windowWidth * aspectRatio;
 	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
 	update_canvas(backgroundImage);
-	//parallaxConstant = (fullHeight - backgroundHeight)/(backgroundHeight - windowHeight);
-	onscroll();
+	$('html').css('font-size', Math.round(windowWidth/30)+'px');
+	window.onscroll();
 }
-
-function requestTick() {
-	if(!ticking) {
-		requestAnimationFrame(update);
-	}
-	else {
-		console.log('tick');
-	}
-	ticking = true;
-}
-
-function update() {
-	ticking = false;
-
-	var currentScrollY = latestKnownScrollY;
-	var newPosition = Math.round(parallaxConstant*scrollY);
-
-	var oldPosition = parseInt($canvas.css('top'));
-
-	$canvas.css('top', newPosition);
-	//moveCanvas(newPosition, oldPosition);
-}
-
-function moveCanvas(newPosition, oldPosition) {
-	if (!timerRunning) {
-		timerRunning = true;
-		var time = Math.abs(newPosition - oldPosition);
-		$canvas.animate({'top': newPosition}, 50, 'linear', function() {
-			timerRunning = false;
-		});
-	}
-	else console.log('a');
-}
-

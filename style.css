@@ -1,3 +1,9 @@
+* {
+	font-family: helvetica-light, helvetica, sans;
+	box-sizing: border-box;
+	margin: 0;
+}
+
 html {
 	height: 100%;
 } 
@@ -14,20 +20,35 @@ body {
 	position: absolute;
 }
 
-* {
-	font-family: helvetica-light, helvetica, sans;
-	box-sizing: border-box;
-}
-
 div.sections {
 	height: 25%;
 	width: 100%;
-	opacity: 0;
 	position: relative;
 }
 
-
+.sections .panel {
+	height: 100%;
+	width: 100%;
+	opacity: 0;
+	position: absolute;
+}
 
 .sections h1 {
 	text-align: center;
+}
+
+#titleBlock {
+	height: 25%;
+	width: 25%;
+	color: white;
+}
+
+.centered {
+	margin: auto;
+	position: absolute;
+	top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.content {
+	opacity: 0;
 }
