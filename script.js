@@ -3,7 +3,7 @@
 // Constants
 var numSections = 5;
 var sectionHeaders = ['title', 'about', 'services', 'rates'];
-var aspectRatio = 1.4;				// The apect ratio of our background image
+var aspectRatio;				// The apect ratio of our background image
 var backgroundImage = new Image();
 backgroundImage.src = "backgrounds/2.jpg"; 
 var imageWidth;
@@ -21,12 +21,16 @@ var latestKnownScrollY = 0;
 var ticking = false;
 
 var $body;
+var $canvas;
 
 $(document).ready(function() {
+
+	$canvas = $('#backgroundCanvas');
 
 	backgroundImage.onload = function () {
 		imageWidth = this.width;
 		imageHeight = this.height;
+		aspectRatio = imageHeight/imageWidth;
 		initialize();
 		$body = $('body');
 		$body.css({
@@ -55,16 +59,12 @@ $(document).ready(function() {
 function update_canvas(imageObject, height, width) {
     // New canvas
     var canvas = $('#backgroundCanvas')[0];
-	var newWidth = $(canvas).width();
-	var newHeight = $(canvas).height();
-
-	// Calculate a new scale
-    // The new scale will be the minimum of the two possible scales
-    var scale = newHeight / imageObject.height;//newWidth / imageObject.width;
+    canvas.width = windowWidth;
+    canvas.height = Math.round(canvas.width * aspectRatio);
 
     // Draw Image content in canvas
     var dst_ctx = canvas.getContext('2d');
-    dst_ctx.drawImage(imageObject, 0, 0, height, width);
+    dst_ctx.drawImage(imageObject, 0, 0, canvas.width, canvas.height);
 
 }
 
