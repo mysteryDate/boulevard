@@ -53,6 +53,8 @@ $(document).ready(function() {
 			$(this).fadeTo(500, 0.25);
 		});
 
+		window.onresize();
+
 	}
 });
 
@@ -108,7 +110,8 @@ function update() {
 
 	var currentScrollY = latestKnownScrollY;
 	var newPosition = parallaxConstant*scrollY;
-	$body.css('background-position', 'center '+newPosition+'px');
+
+	$canvas.css('top', newPosition);
 
 }
 
