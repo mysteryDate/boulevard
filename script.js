@@ -1,7 +1,10 @@
 "use strict";
 
 // Constants
-var sectionHeaders = ['title', 'about', 'services', 'rates'];
+var sectionHeaders = {
+	'English': ['Fran\xE7ais', 'About Us', 'Services', 'Rates'],
+	'French': ['English', '\xC0 Propos De Nous', 'Services', 'Tarifs']
+};
 
 // Image variables
 var backgroundImage = new Image();
@@ -24,6 +27,9 @@ var ticking = false;
 // Cached for speed
 var $canvas;
 
+// User variables
+var language;
+
 $(document).ready(function() {
 
 	$canvas = $('#backgroundCanvas');
@@ -45,6 +51,7 @@ function initialize() {
 	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
 	update_canvas(backgroundImage);
 	color_panels();
+	$('.content').append('<div class="blurPanel"></div>');
 	window.onresize();
 
 	window.setTimeout(function(){ 
@@ -52,24 +59,26 @@ function initialize() {
 			$(this).fadeTo(500, 0.25, 'easeOutQuart');
 			$('.content').fadeTo(500, 1);
 		});
-	}, 1500);
+	}, 600);
 
 	window.setTimeout(function(){
-		console.log(scrollY);
 		var panelPosition = -1*Math.round(fullHeight/(scrollY+windowHeight/2))+5;
 		if (panelPosition < 1) panelPosition = 1;
-		console.log(panelPosition);
-		go_section(panelPosition);
+		go_section(panelPosition, 100);
 	}, 500);
+
+	add_handlers();
+	set_language('English');
 }
 
 function color_panels() {
+	var hue = Math.round(Math.random()*360);	
 	$('.sections .panel').each(function(i, e){
-		var hue = Math.round(Math.random()*360);
 		var saturation = Math.round(Math.random()*20) + 80;
-		var lightness = Math.round(Math.random()*10) + 50;
+		var lightness = Math.round(Math.random()*20) + 40;
 		var color = 'hsl('+hue+','+saturation+'%,'+lightness+'%)'; 
 		$(this).css('background-color', color);
+		hue = hue + 70 + Math.round(Math.random()*40);
 	});
 }
 
@@ -84,11 +93,17 @@ function update_canvas(imageObject, height, width) {
     dst_ctx.drawImage(imageObject, 0, 0, canvas.width, canvas.height);
 }
 
-function go_section(sectionNumber) {
+function go_section(sectionNumber, time) {
 	var top = 2*(sectionNumber-1)*windowHeight + windowHeight/2;
-	$.scrollTo(top, 1000, {'easing': 'easeInOutCubic'});
+	$.scrollTo(top, time, {'easing': 'easeInOutCubic'});
 }
 
+
+(function() {
+  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+  window.requestAnimationFrame = requestAnimationFrame;
+})();
 
 function requestTick() {
 	if(!ticking) {
@@ -111,6 +126,7 @@ window.onscroll = function(e) {
 
 	latestKnownScrollY = window.scrollY;
 	requestTick();
+	//update();
 
 }
 
@@ -124,4 +140,35 @@ window.onresize = function(e) {
 	update_canvas(backgroundImage);
 	$('html').css('font-size', Math.round(windowWidth/30)+'px');
 	window.onscroll();
+}
+
+function set_language(language) {
+
+	var titleText = sectionHeaders[language];
+
+	$('.sectionTitle h1').each(function(index,element){
+		$(element).text(titleText[index+1]);
+	});
+
+	$('#navBar div').each(function(index,element) {
+		$(element).text(titleText[index]);
+	});
+
+	$('.text').each(function(index,element){
+		var filename = element.id + language + '.txt';
+		$.get('content/'+filename, function(data) {
+			$(element).text(data);
+		});
+	});
+}
+
+// Event handlers
+function add_handlers() {
+	$('#languageSelection h2').on('click', function() {
+		language = $(this).text();
+		// Stupid hack because of the special character in the word 'Français'
+		if (language != 'English') language = 'French';
+		set_language(language);
+		go_section(2, 2000);
+	})
 }
