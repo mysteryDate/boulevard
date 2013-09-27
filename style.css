@@ -112,10 +112,14 @@ h1, h2, p {
 }
 
 #navBar {
-	position: fixed;
+	position: absolute;
 	bottom: 0;
-	display: table;
+	display: table-row;
+	height: 5%;
 }
 #navBar div {
-
+	display: table-cell;
+	width: 25%;
+	text-align: center;
+	white-space: nowrap;
 }

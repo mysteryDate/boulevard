@@ -19,6 +19,7 @@ var fullHeight;
 var windowWidth;
 var backgroundHeight; 
 var parallaxConstant;
+var footerHeight;
 
 // For scroll debouncing
 var latestKnownScrollY = 0;
@@ -26,6 +27,7 @@ var ticking = false;
 
 // Cached for speed
 var $canvas;
+var $footer;
 
 // User variables
 var language;
@@ -33,6 +35,8 @@ var language;
 $(document).ready(function() {
 
 	$canvas = $('#backgroundCanvas');
+	$footer = $('#navBar');
+
 
 	backgroundImage.onload = function () {
 		imageWidth = this.width;
@@ -43,12 +47,17 @@ $(document).ready(function() {
 	}
 });
 
-function initialize() {
+function set_sizing_variables() {
 	windowHeight = $(window).height();
 	windowWidth = $(window).width();
 	fullHeight = $(document).height();
+	footerHeight = $footer.children().height();
 	backgroundHeight = windowWidth * aspectRatio;
 	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
+}
+
+function initialize() {
+	set_sizing_variables();
 	update_canvas(backgroundImage);
 	color_panels();
 	$('.content').append('<div class="blurPanel"></div>');
@@ -99,11 +108,11 @@ function go_section(sectionNumber, time) {
 }
 
 
-(function() {
+/*(function() {
   var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                               window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
   window.requestAnimationFrame = requestAnimationFrame;
-})();
+})();*/
 
 function requestTick() {
 	if(!ticking) {
@@ -116,10 +125,11 @@ function update() {
 
 	ticking = false;
 
-	var currentScrollY = window.scrollY;
+	var currentScrollY = latestKnownScrollY;
 	var newPosition = Math.round(parallaxConstant*currentScrollY);
 
 	$canvas.css('top', newPosition);
+	$footer.css('top', currentScrollY+windowHeight-footerHeight);
 }
 
 window.onscroll = function(e) {
@@ -132,11 +142,7 @@ window.onscroll = function(e) {
 
 window.onresize = function(e) {
 
-	windowHeight = $(window).height();
-	windowWidth = $(window).width();
-	fullHeight = $(document).height();
-	backgroundHeight = windowWidth * aspectRatio;
-	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
+	set_sizing_variables();
 	update_canvas(backgroundImage);
 	$('html').css('font-size', Math.round(windowWidth/30)+'px');
 	window.onscroll();
@@ -160,6 +166,8 @@ function set_language(language) {
 			$(element).text(data);
 		});
 	});
+
+	set_sizing_variables();
 }
 
 // Event handlers
@@ -170,5 +178,6 @@ function add_handlers() {
 		if (language != 'English') language = 'French';
 		set_language(language);
 		go_section(2, 2000);
+		console.log('aya')
 	})
 }
