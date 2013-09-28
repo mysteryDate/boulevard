@@ -108,11 +108,11 @@ function go_section(sectionNumber, time) {
 }
 
 
-/*(function() {
+(function() {
   var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                               window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
   window.requestAnimationFrame = requestAnimationFrame;
-})();*/
+})();
 
 function requestTick() {
 	if(!ticking) {
@@ -125,11 +125,13 @@ function update() {
 
 	ticking = false;
 
-	var currentScrollY = latestKnownScrollY;
+	var currentScrollY = window.scrollY;
 	var newPosition = Math.round(parallaxConstant*currentScrollY);
 
 	$canvas.css('top', newPosition);
-	$footer.css('top', currentScrollY+windowHeight-footerHeight);
+	var footerPosition = currentScrollY+windowHeight-footerHeight;
+	if (footerPosition > fullHeight - footerHeight) footerPosition = fullHeight - footerHeight;
+	$footer.css('top', footerPosition);
 }
 
 window.onscroll = function(e) {
@@ -179,5 +181,10 @@ function add_handlers() {
 		set_language(language);
 		go_section(2, 2000);
 		console.log('aya')
+	});
+
+	$('#navBar').on('click', 'div', function(){
+		console.log($(this).index())
+		go_section($(this).index()+1, 1000);
 	})
 }
