@@ -37,7 +37,8 @@ var browser = test_browser();
 console.log(browser);
 
 // For window snapping
-var scrollTimeout
+var scrollTimeout;
+var currentViewState;
 
 
 $(document).ready(function() {
@@ -112,8 +113,22 @@ function update_canvas(imageObject, height, width) {
 }
 
 function go_section(sectionNumber, time) {
+
+	if( currentViewState == sectionNumber) return;
+	currentViewState = get_view_state();
 	var top = 2*(sectionNumber-1)*windowHeight + windowHeight/2;
+	if( !time ) {
+		time = Math.abs(sectionNumber - currentViewState) * 1000;
+	}
 	$.scrollTo(top, time, {'easing': 'easeInOutCubic'});
+	if ( sectionNumber == 1 ) {
+		$('#navBar').slideUp();
+	}
+	else {
+		$('#navBar').slideDown();
+		var footerPosition = scrollY+windowHeight-footerHeight;
+		$('#navBar').css('top', footerPosition);
+	}
 }
 
 function set_language(language) {
@@ -138,23 +153,6 @@ function set_language(language) {
 	set_sizing_variables();
 }
 
-// Event handlers
-function add_handlers() {
-	$('#languageSelection h2').on('click', function() {
-		language = $(this).text();
-		// Stupid hack because of the special character in the word 'Français'
-		if (language != 'English') language = 'French';
-		set_language(language);
-		go_section(2, 2000);
-		console.log('aya')
-	});
-
-	$('#navBar').on('click', 'div', function(){
-		console.log($(this).index())
-		go_section($(this).index()+1, 1000);
-	})
-}
-
 function get_view_state() {
 	return Math.floor( (scrollY + windowHeight/2) /sectionHeight) + 1;
 }
@@ -171,8 +169,8 @@ function test_browser() {
 function start_scroll_timer() {
 	scrollTimeout = window.setTimeout(function(){
 		var state = get_view_state();
-		go_section(state, 500);
-	}, 500);
+		go_section(state, 200);
+	}, 200);
 }
 
 (function() {
@@ -218,4 +216,19 @@ window.onresize = function(e) {
 	update_canvas(backgroundImage);
 	$('html').css('font-size', Math.round(windowWidth/30)+'px');
 	window.onscroll();
+}
+
+// Event handlers
+function add_handlers() {
+	$('#languageSelection h2').on('click', function() {
+		language = $(this).text();
+		// Stupid hack because of the special character in the word 'Français'
+		if (language != 'English') language = 'French';
+		set_language(language);
+		go_section(2, 2000);
+	});
+
+	$('#navBar').on('click', 'div', function(){
+		go_section($(this).index()+1, 1000);
+	})
 }
