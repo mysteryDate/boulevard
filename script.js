@@ -31,6 +31,8 @@ var $footer;
 
 // User variables
 var language;
+var browser = test_browser();
+console.log(browser);
 
 $(document).ready(function() {
 
@@ -187,4 +189,13 @@ function add_handlers() {
 		console.log($(this).index())
 		go_section($(this).index()+1, 1000);
 	})
+}
+
+function test_browser() {
+
+	if( navigator.userAgent.toLowerCase().indexOf('chrome') >-1 ) return 'Chrome';
+	else if( navigator.userAgent.toLowerCase().indexOf('safari') >-1 ) return 'Safari';
+	else if( navigator.userAgent.toLowerCase().indexOf('msie') >-1 ) return 'IE';
+	else if( navigator.userAgent.toLowerCase().indexOf('firefox') >-1 ) return 'Firefox';
+	else if( navigator.userAgent.toLowerCase().indexOf('presto') >-1 ) return 'Opera';
 }
