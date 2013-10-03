@@ -122,12 +122,12 @@ function go_section(sectionNumber, time) {
 	}
 	$.scrollTo(top, time, {'easing': 'easeInOutCubic'});
 	if ( sectionNumber == 1 ) {
-		$('#navBar').slideUp();
+		$footer.slideUp();
 	}
 	else {
-		$('#navBar').slideDown();
+		$footer.slideDown();
 		var footerPosition = scrollY+windowHeight-footerHeight;
-		$('#navBar').css('top', footerPosition);
+		$footer.css('top', footerPosition);
 	}
 }
 
@@ -139,7 +139,7 @@ function set_language(language) {
 		$(element).text(titleText[index+1]);
 	});
 
-	$('#navBar div').each(function(index,element) {
+	$('#navBar div.button').each(function(index,element) {
 		$(element).text(titleText[index]);
 	});
 
@@ -157,8 +157,12 @@ function get_view_state() {
 	return Math.floor( (scrollY + windowHeight/2) /sectionHeight) + 1;
 }
 
-function test_browser() {
+function get_view_distance() {
+	var state = get_view_state();
+	return scrollY - ( state*sectionHeight - (sectionHeight+windowHeight)/2);
+}
 
+function test_browser() {
 	if( navigator.userAgent.toLowerCase().indexOf('chrome') >-1 ) return 'Chrome';
 	else if( navigator.userAgent.toLowerCase().indexOf('safari') >-1 ) return 'Safari';
 	else if( navigator.userAgent.toLowerCase().indexOf('msie') >-1 ) return 'IE';
@@ -169,7 +173,7 @@ function test_browser() {
 function start_scroll_timer() {
 	scrollTimeout = window.setTimeout(function(){
 		var state = get_view_state();
-		go_section(state, 200);
+		go_section(state, 400);
 	}, 200);
 }
 
@@ -228,7 +232,7 @@ function add_handlers() {
 		go_section(2, 2000);
 	});
 
-	$('#navBar').on('click', 'div', function(){
-		go_section($(this).index()+1, 1000);
+	$('#navBar').on('click', 'div.button', function(){
+		go_section($(this).index()+1);
 	})
 }
