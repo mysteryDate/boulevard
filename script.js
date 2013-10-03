@@ -5,6 +5,7 @@ var sectionHeaders = {
 	'English': ['Fran\xE7ais', 'About Us', 'Services', 'Rates'],
 	'French': ['English', '\xC0 Propos De Nous', 'Services', 'Tarifs']
 };
+var numSections = 4;
 
 // Image variables
 var backgroundImage = new Image();
@@ -20,6 +21,7 @@ var windowWidth;
 var backgroundHeight; 
 var parallaxConstant;
 var footerHeight;
+var sectionHeight;
 
 // For scroll debouncing
 var latestKnownScrollY = 0;
@@ -33,6 +35,10 @@ var $footer;
 var language;
 var browser = test_browser();
 console.log(browser);
+
+// For window snapping
+var scrollTimeout
+
 
 $(document).ready(function() {
 
@@ -53,6 +59,7 @@ function set_sizing_variables() {
 	windowHeight = $(window).height();
 	windowWidth = $(window).width();
 	fullHeight = $(document).height();
+	sectionHeight = $('.sections').height();
 	footerHeight = $footer.children().height();
 	backgroundHeight = windowWidth * aspectRatio;
 	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
@@ -109,49 +116,6 @@ function go_section(sectionNumber, time) {
 	$.scrollTo(top, time, {'easing': 'easeInOutCubic'});
 }
 
-
-(function() {
-  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-  window.requestAnimationFrame = requestAnimationFrame;
-})();
-
-function requestTick() {
-	if(!ticking) {
-		requestAnimationFrame(update);
-	}
-	ticking = true;
-}
-
-function update() {
-
-	ticking = false;
-
-	var currentScrollY = window.scrollY;
-	var newPosition = Math.round(parallaxConstant*currentScrollY);
-
-	$canvas.css('top', newPosition);
-	var footerPosition = currentScrollY+windowHeight-footerHeight;
-	if (footerPosition > fullHeight - footerHeight) footerPosition = fullHeight - footerHeight;
-	$footer.css('top', footerPosition);
-}
-
-window.onscroll = function(e) {
-
-	latestKnownScrollY = window.scrollY;
-	requestTick();
-	//update();
-
-}
-
-window.onresize = function(e) {
-
-	set_sizing_variables();
-	update_canvas(backgroundImage);
-	$('html').css('font-size', Math.round(windowWidth/30)+'px');
-	window.onscroll();
-}
-
 function set_language(language) {
 
 	var titleText = sectionHeaders[language];
@@ -191,6 +155,10 @@ function add_handlers() {
 	})
 }
 
+function get_view_state() {
+	return Math.floor( (scrollY + windowHeight/2) /sectionHeight) + 1;
+}
+
 function test_browser() {
 
 	if( navigator.userAgent.toLowerCase().indexOf('chrome') >-1 ) return 'Chrome';
@@ -198,4 +166,56 @@ function test_browser() {
 	else if( navigator.userAgent.toLowerCase().indexOf('msie') >-1 ) return 'IE';
 	else if( navigator.userAgent.toLowerCase().indexOf('firefox') >-1 ) return 'Firefox';
 	else if( navigator.userAgent.toLowerCase().indexOf('presto') >-1 ) return 'Opera';
+}
+
+function start_scroll_timer() {
+	scrollTimeout = window.setTimeout(function(){
+		var state = get_view_state();
+		go_section(state, 500);
+	}, 500);
+}
+
+(function() {
+  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+  window.requestAnimationFrame = requestAnimationFrame;
+})();
+
+function requestTick() {
+	if(!ticking) {
+		requestAnimationFrame(update);
+	}
+	ticking = true;
+}
+
+function update() {
+
+	ticking = false;
+
+	var currentScrollY = window.scrollY;
+	if (currentScrollY > fullHeight - windowHeight) currentScrollY = fullHeight - windowHeight;
+	var newPosition = Math.round(parallaxConstant*currentScrollY);
+
+	$canvas.css('top', newPosition);
+	var footerPosition = currentScrollY+windowHeight-footerHeight;
+	if (footerPosition > fullHeight - footerHeight) footerPosition = fullHeight - footerHeight;
+	$footer.css('top', footerPosition);
+}
+
+window.onscroll = function(e) {
+
+	clearTimeout(scrollTimeout);
+	latestKnownScrollY = window.scrollY;
+	requestTick();
+	start_scroll_timer();
+	//update();
+
+}
+
+window.onresize = function(e) {
+
+	set_sizing_variables();
+	update_canvas(backgroundImage);
+	$('html').css('font-size', Math.round(windowWidth/30)+'px');
+	window.onscroll();
 }
