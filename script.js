@@ -61,7 +61,7 @@ function set_sizing_variables() {
 	windowWidth = $(window).width();
 	fullHeight = $(document).height();
 	sectionHeight = $('.sections').height();
-	footerHeight = $footer.children().height();
+	footerHeight = $footer.children('.button').height();
 	backgroundHeight = windowWidth * aspectRatio;
 	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
 }
@@ -114,8 +114,9 @@ function update_canvas(imageObject, height, width) {
 
 function go_section(sectionNumber, time) {
 
-	if( currentViewState == sectionNumber) return;
 	currentViewState = get_view_state();
+	if( currentViewState == sectionNumber && get_view_distance() == 0) return;
+
 	var top = 2*(sectionNumber-1)*windowHeight + windowHeight/2;
 	if( !time ) {
 		time = Math.abs(sectionNumber - currentViewState) * 1000;
@@ -126,6 +127,7 @@ function go_section(sectionNumber, time) {
 	}
 	else {
 		$footer.slideDown();
+		footerHeight = $footer.children('.button').height();
 		var footerPosition = scrollY+windowHeight-footerHeight;
 		$footer.css('top', footerPosition);
 	}
