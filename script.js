@@ -34,7 +34,6 @@ var $footer;
 // User variables
 var language;
 var browser = test_browser();
-console.log(browser);
 
 // For window snapping
 var scrollTimeout;
@@ -72,6 +71,11 @@ function initialize() {
 	color_panels();
 	$('.content').append('<div class="blurPanel"></div>');
 	window.onresize();
+
+	if( browser == 'Chrome')
+		$('#backgroundCanvas').css('position', 'absolute');
+	else
+		$('#backgroundCanvas').css('position', 'fixed');
 
 	window.setTimeout(function(){ 
 		$('.sections .panel').fadeTo(500, 0.45, 'easeInQuart', function() {
@@ -196,14 +200,16 @@ function update() {
 
 	ticking = false;
 
-	var currentScrollY = window.scrollY;
-	if (currentScrollY > fullHeight - windowHeight) currentScrollY = fullHeight - windowHeight;
-	var newPosition = Math.round(parallaxConstant*currentScrollY);
+	if(browser == "Chrome") {
+		var currentScrollY = window.scrollY;
+		if (currentScrollY > fullHeight - windowHeight) currentScrollY = fullHeight - windowHeight;
+		var newPosition = Math.round(parallaxConstant*currentScrollY);
 
-	$canvas.css('top', newPosition);
-	var footerPosition = currentScrollY+windowHeight-footerHeight;
-	if (footerPosition > fullHeight - footerHeight) footerPosition = fullHeight - footerHeight;
-	$footer.css('top', footerPosition);
+		$canvas.css('top', newPosition);
+		var footerPosition = currentScrollY+windowHeight-footerHeight;
+		if (footerPosition > fullHeight - footerHeight) footerPosition = fullHeight - footerHeight;
+		$footer.css('top', footerPosition);
+	}
 }
 
 window.onscroll = function(e) {
@@ -217,7 +223,6 @@ window.onscroll = function(e) {
 }
 
 window.onresize = function(e) {
-
 	set_sizing_variables();
 	update_canvas(backgroundImage);
 	$('html').css('font-size', Math.round(windowWidth/30)+'px');

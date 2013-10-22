@@ -82,6 +82,9 @@ h1, h2, p {
 #titleBlock h1 {
 	font-size: 4em;
 }
+#titleBlock h1, #titleBlock h2 {
+	line-height: 82%;
+}
 #languageSelection h2 {
 	display: table-cell;
 	width: 25%;
