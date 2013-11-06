@@ -150,8 +150,8 @@ function set_language(language) {
 	});
 
 	$('.text').each(function(index,element){
-		var filename = element.id + language + '.txt';
-		$.get('content/'+filename, function(data) {
+		var filename = element.id + '.txt';
+		$.get('content/'+language+'/'+filename, function(data) {
 			$(element).text(data);
 		});
 	});
