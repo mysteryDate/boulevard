@@ -2,9 +2,8 @@
 /* Overall */
 * {
 	font-family: helvetica-light, helvetica, sans;
-	box-sizing: border-box;
 	margin: 0;
-	font-weight: normal;
+	font-weight: 100;
 	color: white;
 	z-index: 3;
 }
@@ -12,7 +11,7 @@ html {
 	height: 100%;
 }
 body {
-	height: 800%;
+	height: 600%;
 	background-repeat: no-repeat;
 	margin: 0;
 }
@@ -27,7 +26,7 @@ body {
 
 /* Section Styling */
 div.sections {
-	height: 25%;
+	height: 33.33%;
 	width: 100%;
 	position: relative;
 }
@@ -38,6 +37,14 @@ div.sections {
 	position: absolute;
 	z-index: -2;
 }
+
+.container {
+	position: absolute;
+	/*border: 10px solid hsla(0,100%,100%,0.2);*/
+	width: 100%;
+	height: 50%;
+	top: 25%;
+}
 /****************/
 
 /* General Content Rules */
@@ -45,24 +52,9 @@ div.sections {
 	text-align: center;
 	font-size: 3em;
 }
-.centered {
-	margin: auto;
-	position: absolute;
-	top: 0; left: 0; bottom: 0; right: 0;
-}
 .content {
 	opacity: 0;
-}
-h1, h2, p {
-	position: relative;
-}
-.blurPanel {
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	background: black;
-	opacity: 0.2;
-	z-index: 0;
+	background-color: rgba(0,0,0,0.2);
 }
 /****************/
 
@@ -102,28 +94,42 @@ h1, h2, p {
 
 /* Other panels */
 .sectionTitle {
-	position: relative;
-	top: 25%;
+	width: 100%;
+	text-align: center;
+	top: 0%;
 }
 .sections .content {
-	height: 20%;
-	width: 65%;
+	width: 100%;
 }
 .text {
-	position: absolute;
 	z-index: 1;
 }
 
 #navBar {
 	position: absolute;
+	width: 100%;
 	bottom: 0;
 	display: table-row;
 	height: 5%;
 }
 #navBar div {
-	display: table-cell;
-	width: 25%;
+	display: inline-block;
+	width: 32%;
 	text-align: center;
 	white-space: nowrap;
 	cursor: pointer;
+}
+
+/*Services Section*/
+#servicesDiv {
+
+}
+#servicesNav {
+	width: 100%;
+}
+#servicesNav div {
+	display: inline-block;
+	cursor: pointer;
+	width: 32.5%;
+	text-align: center;
 }

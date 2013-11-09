@@ -2,8 +2,8 @@
 
 // Constants
 var sectionHeaders = {
-	'English': ['Fran\xE7ais', 'About Us', 'Services', 'Rates'],
-	'French': ['English', '\xC0 Propos De Nous', 'Services', 'Tarifs']
+	'English': ['Fran\xE7ais', 'Services', 'Contact Us'],
+	'French': ['English', 'Services', 'Contactez-Nous']
 };
 var numSections = 3;
 
@@ -32,7 +32,7 @@ var $canvas;
 var $footer;
 
 // User variables
-var language;
+var language = 'english';
 var browser = test_browser();
 
 // For window snapping
@@ -59,7 +59,6 @@ function initialize() {
 	set_sizing_variables();
 	update_canvas(backgroundImage);
 	color_panels();
-	$('.content').append('<div class="blurPanel"></div>');
 	window.onresize();
 
 	if( browser == 'Chrome')
@@ -75,9 +74,7 @@ function initialize() {
 	}, 600);
 
 	window.setTimeout(function(){
-		var panelPosition = -1*Math.round(fullHeight/(scrollY+windowHeight/2))+5;
-		if (panelPosition < 1) panelPosition = 1;
-		go_section(panelPosition, 100);
+		go_section(get_view_state(), 100);
 	}, 500);
 
 	add_handlers();
@@ -86,6 +83,7 @@ function initialize() {
 
 function set_sizing_variables() {
 	windowHeight = $(window).height();
+	// $('body').css('height', windowHeight*2*numSections);
 	windowWidth = $(window).width();
 	sectionHeight = $('.sections').height();
 	fullHeight = sectionHeight*numSections;
@@ -226,6 +224,9 @@ window.onresize = function(e) {
 	set_sizing_variables();
 	update_canvas(backgroundImage);
 	$('html').css('font-size', Math.round(windowWidth/30)+'px');
+	$('.container').height(windowHeight);
+	$('.sections .content').css({
+	});
 	window.onscroll();
 }
 
@@ -242,4 +243,11 @@ function add_handlers() {
 	$('#navBar').on('click', 'div.button', function(){
 		go_section($(this).index()+1);
 	})
+
+	$('#servicesNav').on('click', 'div.button', function(){
+		var filename = this.id + '.txt';
+		$.get('content/'+language+'/'+filename, function(data) {
+			$('#servicesText').text(data);
+		});
+	});
 }
