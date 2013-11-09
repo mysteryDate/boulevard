@@ -5,7 +5,7 @@ var sectionHeaders = {
 	'English': ['Fran\xE7ais', 'About Us', 'Services', 'Rates'],
 	'French': ['English', '\xC0 Propos De Nous', 'Services', 'Tarifs']
 };
-var numSections = 4;
+var numSections = 3;
 
 // Image variables
 var backgroundImage = new Image();
@@ -55,16 +55,6 @@ $(document).ready(function() {
 	}
 });
 
-function set_sizing_variables() {
-	windowHeight = $(window).height();
-	windowWidth = $(window).width();
-	fullHeight = $(document).height();
-	sectionHeight = $('.sections').height();
-	footerHeight = $footer.children('.button').height();
-	backgroundHeight = windowWidth * aspectRatio;
-	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
-}
-
 function initialize() {
 	set_sizing_variables();
 	update_canvas(backgroundImage);
@@ -92,6 +82,16 @@ function initialize() {
 
 	add_handlers();
 	set_language('English');
+}
+
+function set_sizing_variables() {
+	windowHeight = $(window).height();
+	windowWidth = $(window).width();
+	sectionHeight = $('.sections').height();
+	fullHeight = sectionHeight*numSections;
+	footerHeight = $footer.children('.button').height();
+	backgroundHeight = windowWidth * aspectRatio;
+	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
 }
 
 function color_panels() {
