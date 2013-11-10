@@ -1,0 +1,9 @@
+body, html {
+	height: 100%;
+	margin: 0;
+}
+
+#backgroundCanvas {
+	z-index: -1;
+	position: absolute;
+}
