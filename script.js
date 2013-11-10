@@ -67,8 +67,8 @@ function initialize() {
 		$('#backgroundCanvas').css('position', 'fixed');
 
 	window.setTimeout(function(){ 
-		$('.sections .panel').fadeTo(500, 0.45, 'easeInQuart', function() {
-			$(this).fadeTo(500, 0.25, 'easeOutQuart');
+		$('.sections .panel').fadeTo(500, 0.95, 'easeInQuart', function() {
+			$(this).fadeTo(500, 0.45, 'easeOutQuart');
 			$('.content').fadeTo(500, 1);
 		});
 	}, 600);
@@ -87,7 +87,7 @@ function set_sizing_variables() {
 	windowWidth = $(window).width();
 	sectionHeight = $('.sections').height();
 	fullHeight = sectionHeight*numSections;
-	footerHeight = $footer.children('.button').height();
+	footerHeight = $footer.height();
 	backgroundHeight = windowWidth * aspectRatio;
 	parallaxConstant = (fullHeight - backgroundHeight)/(fullHeight - windowHeight);
 }
@@ -196,6 +196,7 @@ function requestTick() {
 
 function update() {
 
+	console.log('update');
 	ticking = false;
 
 	if(browser == "Chrome") {
@@ -221,11 +222,13 @@ window.onscroll = function(e) {
 }
 
 window.onresize = function(e) {
+	console.log('onresize');
 	set_sizing_variables();
 	update_canvas(backgroundImage);
 	$('html').css('font-size', Math.round(windowWidth/30)+'px');
 	$('.container').height(windowHeight);
 	$('.sections .content').css({
+		height: 'calc(100% - ' + (footerHeight+$('.sectionTitle').height()) +'px)'
 	});
 	window.onscroll();
 }

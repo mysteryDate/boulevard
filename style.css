@@ -58,8 +58,10 @@ div.sections {
 	font-size: 3em;
 }
 .content {
-	opacity: 0;
+	/*opacity: 0;*/
+	overflow: scroll;
 	background-color: rgba(0,0,0,0.2);
+
 }
 /****************/
 
@@ -115,7 +117,7 @@ div.sections {
 	width: 100%;
 	bottom: 0;
 	display: table-row;
-	height: 5%;
+	height: 7%;
 }
 #navBar div {
 	display: inline-block;
