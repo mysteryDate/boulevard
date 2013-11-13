@@ -1,34 +1,72 @@
 "use strict";
+var NUM_SECTIONS = 3;
 
-var background = new background();
+// Global sizing variables
+var fullHeight;
+var sectionHeight;
+var parallaxConstant;
 
-function background() {
+var Background = new function() {
 	this.image = new Image();
-	this.image.aspectRatio;
+	this.aspectRatio;
 	this.node;
-	this.width;
-	this.height;
+	this.$node;
 }
 
 $(document).ready(function() {
 
-	background.image = new Image();
-	background.image.src = "backgrounds/2.jpg";
-	background.node = $('#backgroundCanvas')[0];
+	Background.image = new Image();
+	Background.image.src = "backgrounds/2.jpg";
+	Background.node = $('#backgroundCanvas')[0];
+	Background.$node = $(Background.node)
 	
-	background.image.onload = function () {
-		background.image.aspectRatio = background.image.height / background.image.width;
+	Background.image.onload = function () {
+		Background.aspectRatio = Background.image.height / Background.image.width;
+		Background.node.width = $(window).width();
+		Background.node.height = $(window).width() * Background.aspectRatio;
+		onresize();
 	}
 });
 
-function update_background() {
 
-	background.node.width = $(window).width();
-	background.node.height = $(window).width() * background.image.aspectRatio;
 
-	// Draw image onto canvas
-	var dst_ctx = background.node.getContext('2d');
-	dst_ctx.drawImage(background.image, 0, 0, background.node.width, background.node.height)
+//+++++++++++++++++++++++++++++++++++++++++++++	//
+//				Scroll Throttling				//
+//+++++++++++++++++++++++++++++++++++++++++++++	//
+
+// Normalize all animation frames
+(function() {
+  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+  window.requestAnimationFrame = requestAnimationFrame;
+})();
+
+var Scroller = new function() {
+
+	this.scrollTimeout;
+	this.latestKnownScrollY;
+	var ticking = false;
+
+	this.requestTick = function() {
+		if(!ticking) {
+			requestAnimationFrame(update);
+		}
+		ticking = true;
+		// update();
+	}
+
+	var update = function() {
+		// console.log('upd');
+		ticking = false;
+		var currentScrollY = Scroller.latestKnownScrollY;
+		var newPosition = parallaxConstant * currentScrollY;
+
+		// catch bounce overflow 
+		if( newPosition >= (fullHeight - Background.node.height) )
+			newPosition = fullHeight - Background.node.height;
+		
+		Background.$node.css('top', newPosition);
+	}
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++ //
@@ -36,5 +74,26 @@ function update_background() {
 //+++++++++++++++++++++++++++++++++++++++++++ //
 
 window.onresize = function(resizeEvent) {
+
+	var update_background = function() {
+
+		Background.node.width = $(window).width();
+		Background.node.height = $(window).width() * Background.aspectRatio;
+
+		// Draw image onto canvas
+		var dst_ctx = Background.node.getContext('2d');
+		dst_ctx.drawImage(Background.image, 0, 0, Background.node.width, Background.node.height);
+
+	}
+
+	// Set sizing variables
+	sectionHeight = $('.section').height();
+	fullHeight = sectionHeight * NUM_SECTIONS;
+	parallaxConstant = (fullHeight - Background.node.height) / (fullHeight - $(window).height() );
 	update_background();
+}
+
+window.onscroll = function(scrollEvent) {
+	Scroller.latestKnownScrollY = window.scrollY;
+	Scroller.requestTick();
 }
