@@ -59,9 +59,11 @@ div.sections {
 }
 .content {
 	/*opacity: 0;*/
-	overflow: scroll;
-	background-color: rgba(0,0,0,0.2);
-
+	overflow: hidden;
+	/*background-color: rgba(0,0,0,0.2);*/
+}
+p {
+	text-align: justify;
 }
 /****************/
 
@@ -139,4 +141,18 @@ div.sections {
 	cursor: pointer;
 	width: 32.5%;
 	text-align: center;
+}
+#servicesText {
+	background-color: hsla(0,0%,0%,0.2);
+	width: 95%;
+	margin: 0 auto;
+	overflow: scroll;
+}
+#servicesText h1 {
+	text-align: left;
+	font-size: 1.5em;
+}
+#servicesText {
+	text-align: justify;
+	font-size: 0.8em;
 }
