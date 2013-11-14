@@ -16,7 +16,7 @@ var Background = new function() {
 $(document).ready(function() {
 
 	Background.image = new Image();
-	Background.image.src = "backgrounds/2.jpg";
+	Background.image.src = "../backgrounds/2.jpg";
 	Background.node = $('#backgroundCanvas')[0];
 	Background.$node = $(Background.node)
 	
