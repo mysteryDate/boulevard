@@ -153,6 +153,16 @@ p {
 	font-size: 1.5em;
 }
 #servicesText {
+	text-indent: 0.5em;
 	text-align: justify;
 	font-size: 0.8em;
+}
+#servicesText>* {
+	margin-top: 0.5em;
+}
+#servicesText ul:last-child {
+	margin-bottom: 4em;
+}
+#servicesText p:first-line {
+	color: pink;
 }
