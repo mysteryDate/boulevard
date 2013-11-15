@@ -247,7 +247,10 @@ function add_handlers() {
 		go_section($(this).index()+1);
 	})
 
-	$('#servicesNav').on('click', 'div.button', function(){
+	$('#servicesNav').on('click', '.button', function(){
+		$('#servicesNav .tab').removeClass('selected');
+		$(this).parent().addClass('selected');
+
 		var filename = this.id + '.html';
 		$.get('content/'+language+'/'+filename, function(data) {
 			$('#servicesText').empty().append(data);

@@ -11,6 +11,8 @@
 	-moz-user-select: none;
 	-o-user-select: none;
 	user-select: none;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }
 html {
 	height: 100%;
@@ -59,7 +61,9 @@ div.sections {
 }
 .content {
 	/*opacity: 0;*/
+	width: 95%;
 	overflow: hidden;
+	margin: 0 auto;
 	/*background-color: rgba(0,0,0,0.2);*/
 }
 p {
@@ -70,6 +74,7 @@ p {
 /* Interactivity */
 .button:hover {
 	opacity: 0.5;
+	cursor: pointer;
 }
 
 /* Panel 1 - Title */
@@ -107,13 +112,9 @@ p {
 	text-align: center;
 	top: 0%;
 }
-.sections .content {
-	width: 100%;
-}
 .text {
 	z-index: 1;
 }
-
 #navBar {
 	position: absolute;
 	width: 100%;
@@ -131,20 +132,32 @@ p {
 
 /*Services Section*/
 #servicesDiv {
-
+	border-radius: 0 0 0.5em 0.5em;
 }
+
 #servicesNav {
 	width: 100%;
+	display: table;
 }
-#servicesNav div {
+#servicesNav .tab {
 	display: inline-block;
-	cursor: pointer;
-	width: 32.5%;
+	width: 33.33%;
+	background-color: rgba(0,0,0,0.2);
+	border-radius: 0.5em 0.5em 0 0;
 	text-align: center;
 }
+#servicesNav .button {
+	margin: 0 auto;
+	display: inline-block;
+}
+#servicesNav .tab.selected {
+	background-color: rgba(0,0,0,0.4);
+}
+
+
 #servicesText {
-	background-color: hsla(0,0%,0%,0.2);
-	width: 95%;
+	background-color: hsla(0,0%,0%,0.4);
+	width: 100%;
 	margin: 0 auto;
 	overflow: scroll;
 }
@@ -156,6 +169,7 @@ p {
 	text-indent: 0.5em;
 	text-align: justify;
 	font-size: 0.8em;
+	padding: 1%;
 }
 #servicesText>* {
 	margin-top: 0.5em;
@@ -164,5 +178,5 @@ p {
 	margin-bottom: 4em;
 }
 #servicesText p:first-line {
-	color: pink;
+
 }
