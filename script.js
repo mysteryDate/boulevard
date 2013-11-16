@@ -67,7 +67,7 @@ function initialize() {
 		$('#backgroundCanvas').css('position', 'fixed');
 
 	window.setTimeout(function(){ 
-		$('.sections .panel').fadeTo(500, 0.95, 'easeInQuart', function() {
+		$('.sections .panel').fadeTo(500, 0.75, 'easeInQuart', function() {
 			$(this).fadeTo(500, 0.25, 'easeOutQuart');
 			$('.content').fadeTo(500, 1);
 		});
@@ -96,7 +96,7 @@ function color_panels() {
 	var hue = Math.round(Math.random()*360);	
 	$('.sections .panel').each(function(i, e){
 		var saturation = Math.round(Math.random()*20) + 80;
-		var lightness = Math.round(Math.random()*20) + 40;
+		var lightness = Math.round(Math.random()*20) + 20;
 		var color = 'hsl('+hue+','+saturation+'%,'+lightness+'%)'; 
 		$(this).css('background-color', color);
 		hue = hue + 70 + Math.round(Math.random()*40);
@@ -247,9 +247,9 @@ function add_handlers() {
 		go_section($(this).index()+1);
 	})
 
-	$('#servicesNav').on('click', '.button', function(){
+	$('#servicesNav').on('click', '.tab', function(){
 		$('#servicesNav .tab').removeClass('selected');
-		$(this).parent().addClass('selected');
+		$(this).addClass('selected');
 
 		var filename = this.id + '.html';
 		$.get('content/'+language+'/'+filename, function(data) {

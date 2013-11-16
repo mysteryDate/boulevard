@@ -1,10 +1,10 @@
 
 /* Overall */
 * {
-	font-family: helvetica-light, helvetica, sans;
+	font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	margin: 0;
 	font-weight: 100;
-	color: white;
+	/*color: white;*/
 	z-index: 3;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -21,7 +21,14 @@ body {
 	height: 600%;
 	background-repeat: no-repeat;
 	margin: 0;
+	color: white;
 }
+/****************/
+
+/*Animations?*/
+/*div {
+	transition: color 0.5s, background-color 0.5s;
+}*/
 /****************/
 
 /*Background*/
@@ -73,7 +80,7 @@ p {
 
 /* Interactivity */
 .button:hover {
-	opacity: 0.5;
+	color: hsla(60, 100%, 71%, 1);
 	cursor: pointer;
 }
 
@@ -137,26 +144,31 @@ p {
 
 #servicesNav {
 	width: 100%;
-	display: table;
+	display: flex;
 }
 #servicesNav .tab {
 	display: inline-block;
 	width: 33.33%;
-	background-color: rgba(0,0,0,0.2);
+	background-color: rgba(0,0,0,0.3);
 	border-radius: 0.5em 0.5em 0 0;
 	text-align: center;
+}
+#servicesNav .tab:hover {
+	cursor: pointer;
+	color: hsla(60, 100%, 71%, 1);
+	background-color: rgba(0,0,0,0.5);
 }
 #servicesNav .button {
 	margin: 0 auto;
 	display: inline-block;
 }
 #servicesNav .tab.selected {
-	background-color: rgba(0,0,0,0.4);
+	background-color: rgba(0,0,0,0.6);
 }
 
 
 #servicesText {
-	background-color: hsla(0,0%,0%,0.4);
+	background-color: hsla(0,0%,0%,0.6);
 	width: 100%;
 	margin: 0 auto;
 	overflow: scroll;
