@@ -79,6 +79,7 @@ function initialize() {
 
 	add_handlers();
 	set_language('English');
+	$('#translation').click();
 }
 
 function set_sizing_variables() {
@@ -240,12 +241,25 @@ function add_handlers() {
 		// Stupid hack because of the special character in the word 'Français'
 		if (language != 'English') language = 'French';
 		set_language(language);
+		$('#translation').click();
 		go_section(2, 2000);
 	});
 
-	$('#navBar').on('click', 'div.button', function(){
-		go_section($(this).index()+1);
-	})
+	$('#navBar').on({
+		click: function(e) {
+			go_section($(this).index()+1);
+		},
+		mouseenter: function(e) {
+			$(this).css('font-size', '1.5em');
+		},
+		mouseleave: function(e) {
+			$(this).css('font-size', '1em');
+		}
+	}, '.button');
+
+	// $('#navBar').on('mouseenter', 'div.button', function(){
+	// 	$(this).css('font-size', '3em');
+	// });
 
 	$('#servicesNav').on('click', '.tab', function(){
 		$('#servicesNav .tab').removeClass('selected');
