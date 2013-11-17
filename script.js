@@ -5,6 +5,10 @@ var sectionHeaders = {
 	'English': ['Fran\xE7ais', 'Services', 'Contact Us'],
 	'French': ['English', 'Services', 'Contactez-Nous']
 };
+var serviceSections = {
+	'English': ['Translation', 'Revision'],
+	'French': ['Traduction', 'R\xE9vision']
+};
 var numSections = 3;
 
 // Image variables
@@ -32,7 +36,7 @@ var $canvas;
 var $footer;
 
 // User variables
-var language = 'english';
+var language = 'French';
 var browser = test_browser();
 
 // For window snapping
@@ -63,8 +67,10 @@ function initialize() {
 
 	if( browser == 'Chrome')
 		$('#backgroundCanvas').css('position', 'absolute');
-	else
+	else {
 		$('#backgroundCanvas').css('position', 'fixed');
+		$footer.css('position', 'fixed');
+	}
 
 	window.setTimeout(function(){ 
 		$('.sections .panel').fadeTo(500, 0.75, 'easeInQuart', function() {
@@ -78,7 +84,7 @@ function initialize() {
 	}, 500);
 
 	add_handlers();
-	set_language('English');
+	set_language('French');
 	$('#translation').click();
 }
 
@@ -112,7 +118,12 @@ function update_canvas(imageObject, height, width) {
 
     // Draw Image content in canvas
     var dst_ctx = canvas.getContext('2d');
+
     dst_ctx.drawImage(imageObject, 0, 0, canvas.width, canvas.height);
+
+   	if(browser != 'Chrome' && windowWidth/windowHeight >= 1.5) {
+    	$canvas.css('top', -100*windowWidth/windowHeight+'px');
+    }
 }
 
 function go_section(sectionNumber, time) {
@@ -132,7 +143,8 @@ function go_section(sectionNumber, time) {
 		$footer.slideDown();
 		footerHeight = $footer.children('.button').height();
 		var footerPosition = scrollY+windowHeight-footerHeight;
-		$footer.css('top', footerPosition);
+		if( browser == 'Chrome')
+			$footer.css('top', footerPosition);
 	}
 }
 
@@ -154,6 +166,19 @@ function set_language(language) {
 			$(element).text(data);
 		});
 	});
+
+	$('#servicesNav .button').each(function(index, element){
+		$(this).text(serviceSections[language][index]);
+	});
+
+	$.get('content/'+language+'/contact.txt', function(data) {
+		$('#contact a').text(data);
+	});
+
+	if(language == "French")
+		$('#contact a').attr('href', "mailto:info@traductionboulevard.com?Subject=Une%20estimation%20gratuite")
+	if(language == "English")
+		$('#contact a').attr('href', "mailto:info@boulevardtranslation.com?Subject=Free%20translation%20quote")
 
 	set_sizing_variables();
 }
@@ -197,7 +222,6 @@ function requestTick() {
 
 function update() {
 
-	console.log('update');
 	ticking = false;
 
 	if(browser == "Chrome") {
@@ -223,11 +247,9 @@ window.onscroll = function(e) {
 }
 
 window.onresize = function(e) {
-	console.log('onresize');
 	set_sizing_variables();
 	update_canvas(backgroundImage);
 	$('body').css('font-size', Math.round(windowWidth/30)+'px');
-	console.log(windowWidth/30);
 	$('.container').height(windowHeight);
 	$('.sections .content').css('height', 'calc(100% - ' + (footerHeight+$('.sectionTitle').height()) +'px)');
 	$('#servicesText').css('height', 'calc(100% - ' + $('#servicesNav').height()+'px)');
@@ -247,16 +269,27 @@ function add_handlers() {
 
 	$('#navBar').on({
 		click: function(e) {
-			go_section($(this).index()+1);
+			if($(this).index() != 0)
+				go_section($(this).index()+1);
+			else {
+				language = $(this).text();
+				// Stupid hack because of the special character in the word 'Français'
+				if (language != 'English') language = 'French';
+				$('#servicesNav .selected').click();
+				set_language(language);
+			}
 		},
 		mouseenter: function(e) {
-			$(this).css('font-size', '1.5em');
+			$(this).css('font-size', '1em');
 		},
 		mouseleave: function(e) {
 			$(this).css('font-size', '1em');
 		}
 	}, '.button');
 
+	$('#contact .content').on('click', function(){
+		$('#contact a')[0].click();
+	});
 	// $('#navBar').on('mouseenter', 'div.button', function(){
 	// 	$(this).css('font-size', '3em');
 	// });

@@ -13,6 +13,7 @@
 	user-select: none;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
+	text-decoration: none;
 }
 html {
 	height: 100%;
@@ -22,6 +23,9 @@ body {
 	background-repeat: no-repeat;
 	margin: 0;
 	color: white;
+}
+a {
+	color: inherit;	
 }
 /****************/
 
@@ -79,7 +83,7 @@ p {
 /****************/
 
 /* Interactivity */
-.button:hover {
+.button:hover, a:hover, #contactDiv:hover {
 	color: hsla(60, 100%, 71%, 1);
 	cursor: pointer;
 }
@@ -124,6 +128,7 @@ p {
 }
 #navBar {
 	position: absolute;
+	display: none;
 	width: 100%;
 	bottom: 0;
 	display: table-row;
@@ -186,8 +191,11 @@ p {
 #servicesText>* {
 	margin-top: 0.5em;
 }
-#servicesText ul:last-child {
-	margin-bottom: 4em;
+#servicesText div {
+	text-align: center;
+	font-size: 1.5em;
+	width: 50%;
+	margin: 1em auto;
 }
 /***************/
 
@@ -197,12 +205,15 @@ p {
 	border-radius: 0.5em;
 	position: absolute;
 	left: 2.5%;
+	cursor: pointer;
+	color: white;
 }
-#contactDiv div{
-	height: 1em;
+#contactDiv:hover {
+	background-color: rgba(0,0,0,0.6);
+}
+#contactDiv a{
 	position: absolute;
-	top: 50%;
-	margin-top: -1.5em;
+	top: 15%;
 	margin-left: 12.5%;
 	width: 75%;
 	text-align: center;
