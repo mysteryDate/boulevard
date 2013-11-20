@@ -3,7 +3,7 @@
 // Constants
 var sectionHeaders = {
 	'English': ['Fran\xE7ais', 'Services', 'Contact Us'],
-	'French': ['English', 'Services', 'Contactez-Nous']
+	'French': ['English', 'Services', 'Contactez-nous']
 };
 var serviceSections = {
 	'English': ['Translation', 'Revision'],
