@@ -48,6 +48,8 @@ $(document).ready(function() {
 
 	$canvas = $('#backgroundCanvas');
 	$footer = $('#navBar');
+	$(this).scrollTop(0);
+	$footer.css('display', 'none');
 
 
 	backgroundImage.onload = function () {
